@@ -1,0 +1,325 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { 
+  Menu, 
+  X, 
+  ArrowRight, 
+  Instagram, 
+  Facebook, 
+  Twitter, 
+  Video, 
+  Theater, 
+  Clapperboard, 
+  Film, 
+  Briefcase,
+  ChevronRight,
+  Phone,
+  Mail
+} from 'lucide-react';
+import { useState, useEffect } from 'react';
+
+export default function App() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [currentView, setCurrentView] = useState<'home' | 'academics' | 'director' | 'contact'>('home');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 40);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navigateTo = (view: 'home' | 'academics' | 'director' | 'contact') => {
+    setCurrentView(view);
+    setIsMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <div className="min-h-screen bg-ivory text-obsidian font-sans">
+      
+      {/* Navegación Simple */}
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md py-4 border-b border-obsidian/5' : 'bg-transparent py-8'}`}>
+        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+          <button 
+            onClick={() => navigateTo('home')}
+            className="flex flex-col group"
+          >
+            <span className="font-serif text-3xl font-bold leading-none tracking-tighter">CAE</span>
+            <span className="text-[10px] uppercase tracking-[0.2em] opacity-40 font-bold">Puerto Rico</span>
+          </button>
+
+          <div className="hidden md:flex items-center gap-12">
+            {['Inicio', 'Academia', 'Director', 'Contacto'].map((item) => (
+              <button 
+                key={item}
+                onClick={() => {
+                  const views: Record<string, typeof currentView> = {
+                    'Inicio': 'home',
+                    'Academia': 'academics',
+                    'Director': 'director',
+                    'Contacto': 'contact'
+                  };
+                  navigateTo(views[item]);
+                }}
+                className={`nav-link ${currentView === (item === 'Inicio' ? 'home' : item === 'Academia' ? 'academics' : item === 'Director' ? 'director' : 'contact') ? 'text-brand' : ''}`}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+
+          <button 
+            className="md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </nav>
+
+      {/* Menú Móvil Minimalista */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 bg-white z-[60] flex flex-col items-center justify-center gap-8">
+          <button onClick={() => setIsMenuOpen(false)} className="absolute top-8 right-6">
+            <X size={32} />
+          </button>
+          {['Inicio', 'Academia', 'Director', 'Contacto'].map((item) => (
+            <button 
+              key={item}
+              onClick={() => {
+                const views: Record<string, typeof currentView> = {
+                  'Inicio': 'home',
+                  'Academia': 'academics',
+                  'Director': 'director',
+                  'Contacto': 'contact'
+                };
+                navigateTo(views[item]);
+              }}
+              className="text-4xl font-serif font-bold uppercase tracking-tighter"
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <main>
+        {currentView === 'home' && (
+          <>
+            {/* Hero Minimalista - Fondo Negro como el Logo */}
+            <section className="pt-60 pb-40 px-6 bg-obsidian text-white relative">
+              <div className="absolute left-6 top-60 bottom-40 red-accent-line hidden lg:block" />
+              <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <div>
+                  <div className="section-label mb-6 !text-brand">CONSERVATORIO DE ARTES ESCÉNICAS</div>
+                  <h1 className="text-7xl md:text-9xl mb-8 leading-[0.9] text-white">
+                    El Arte de <br /> <span className="text-brand">Actuar</span>
+                  </h1>
+                  <p className="text-xl text-white/60 max-w-md mb-12 font-serif italic">
+                    "Forjando los artistas que definirán el futuro de la escena global."
+                  </p>
+                  <div className="flex flex-wrap gap-6">
+                    <button onClick={() => navigateTo('academics')} className="px-10 py-5 bg-white text-obsidian text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-brand hover:text-white transition-colors duration-300">PROGRAMAS</button>
+                    <button onClick={() => navigateTo('contact')} className="px-10 py-5 border border-white text-white text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-white hover:text-obsidian transition-colors duration-300">ADMISIÓN</button>
+                  </div>
+                </div>
+                <div className="image-container aspect-square border border-white/10">
+                  <img 
+                    src="https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&q=80&w=1200" 
+                    alt="Actor on stage" 
+                    className="w-full h-full object-cover opacity-80"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              </div>
+            </section>
+
+            {/* Breve Introducción */}
+            <section className="py-40 bg-white px-6">
+              <div className="max-w-3xl mx-auto space-y-12">
+                <h2 className="text-5xl border-l-4 border-brand pl-8">"Donde la técnica encuentra la verdad."</h2>
+                <div className="space-y-6 text-lg text-obsidian/70 leading-relaxed font-serif italic">
+                  <p>
+                    En el Conservatorio de Artes Escénicas de Puerto Rico, brindamos las herramientas y el rigor técnico necesarios para destacar internacionalmente.
+                  </p>
+                  <p>
+                    Liderado por Wilderman García, nuestro ecosistema asegura que tu talento sea el verdadero protagonista.
+                  </p>
+                  <button onClick={() => navigateTo('director')} className="flex items-center gap-2 text-brand font-bold text-[10px] uppercase tracking-widest pt-4">
+                    VER VISIÓN <ChevronRight size={14} />
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            {/* Módulos Académicos */}
+            <section className="py-40 px-6 border-t border-obsidian/5">
+              <div className="max-w-7xl mx-auto">
+                <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+                  <h2 className="text-6xl">Certificado <br /> Profesional</h2>
+                  <button onClick={() => navigateTo('academics')} className="text-[10px] font-black uppercase tracking-widest border-b border-brand pb-2">Ver Detalle</button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-px bg-obsidian/10">
+                  {[
+                    { title: "Cámara I", icon: <Video /> },
+                    { title: "Cámara II", icon: <Clapperboard /> },
+                    { title: "Teatro", icon: <Theater /> },
+                    { title: "Cine", icon: <Film /> },
+                    { title: "Carrera", icon: <Briefcase /> }
+                  ].map((m, i) => (
+                    <div key={i} className="bg-ivory p-12 aspect-[3/4] flex flex-col justify-between hover:bg-white transition-colors duration-500">
+                      <div className="text-brand opacity-60">{m.icon}</div>
+                      <div>
+                        <span className="block text-[10px] opacity-20 mb-2">0{i+1}</span>
+                        <h4 className="text-2xl font-bold">{m.title}</h4>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </>
+        )}
+
+        {currentView === 'academics' && (
+          <section className="pt-40 pb-40 px-6">
+            <div className="max-w-4xl mx-auto">
+              <div className="mb-20">
+                <div className="section-label mb-4">ACADEMIA</div>
+                <h1 className="text-6xl md:text-8xl mb-8">Formación</h1>
+                <p className="text-xl text-obsidian/50 font-serif italic">
+                  Un currículo riguroso diseñado para dotar al artista de herramientas técnicas y emocionales.
+                </p>
+              </div>
+
+              <div className="space-y-4 mb-20">
+                {[
+                  { title: "Actuación ante la Cámara I", desc: "Lenguaje técnico audiovisual, encuadre, escala de planos." },
+                  { title: "Actuación ante la Cámara II", desc: "Subtexto, intención y objetivos para formatos complejos." },
+                  { title: "Laboratorio de Teatro", desc: "Conexión emocional viva bajo la técnica Meisner." },
+                  { title: "Laboratorio de Cine", desc: "Rodaje real de cortometraje y ritmo de set profesional." },
+                  { title: "La Carrera Actoral", desc: "Autogestión, self-tapes y preparación de castings." }
+                ].map((m, i) => (
+                  <div key={i} className="group border-b border-obsidian/5 py-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="space-y-2">
+                      <span className="text-brand text-[10px] font-bold">MÓDULO 0{i+1}</span>
+                      <h3 className="text-3xl lowercase italic font-serif group-hover:text-brand transition-colors">{m.title}</h3>
+                    </div>
+                    <p className="text-sm text-obsidian/60 max-w-xs">{m.desc}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bg-obsidian text-white p-12">
+                <h4 className="text-2xl mb-6">Admisiones 2026</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-[10px] uppercase tracking-widest opacity-60 mb-10">
+                  <div>Término I<br/>Sep - Dic</div>
+                  <div>Término II<br/>Ene - Abr</div>
+                  <div>Término III<br/>May - Ago</div>
+                </div>
+                <button onClick={() => navigateTo('contact')} className="primary-btn !bg-white !text-obsidian w-full md:w-auto">SOLICITAR INGRESO</button>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {currentView === 'director' && (
+          <section className="pt-40 pb-40 px-6">
+            <div className="max-w-4xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-start">
+                <div className="image-container aspect-[3/4]">
+                   <img 
+                    src="https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&q=80&w=1200" 
+                    alt="Director" 
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                   />
+                </div>
+                <div className="space-y-10">
+                  <div className="section-label">LIDERAZGO</div>
+                  <h1 className="text-6xl italic italic">Wilderman Garcia</h1>
+                  <div className="space-y-6 text-lg text-obsidian/60 font-serif italic">
+                    <p>
+                      Con más de 25 años de trayectoria internacional, Wilderman García lidera la institución con una visión de excelencia técnica.
+                    </p>
+                    <p>
+                      Artista EB1A enfocado en integrar las tradiciones europeas y americanas con la fuerza del artista caribeño.
+                    </p>
+                  </div>
+                  <div className="pt-10 border-t border-obsidian/10">
+                     <div className="text-[10px] font-black uppercase tracking-widest text-brand mb-2">Trayectoria</div>
+                     <p className="text-sm">Madrid Film Awards: Mejor Actor. Especialista en Actuación ante la Cámara.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {currentView === 'contact' && (
+          <section className="pt-40 pb-40 px-6">
+            <div className="max-w-xl mx-auto text-center space-y-12">
+              <h1 className="text-6xl md:text-8xl">Contacto</h1>
+              <p className="text-xl text-obsidian/40 font-serif italic mb-20">
+                Aplica ahora para el Certificado Profesional en Actuación.
+              </p>
+              
+              <form className="text-left space-y-8">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Nombre</label>
+                  <input type="text" className="w-full border-b border-obsidian/20 py-4 font-serif italic focus:outline-none focus:border-brand transition-colors bg-transparent" placeholder="Tu nombre" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Email</label>
+                  <input type="email" className="w-full border-b border-obsidian/20 py-4 font-serif italic focus:outline-none focus:border-brand transition-colors bg-transparent" placeholder="Email" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Mensaje</label>
+                  <textarea className="w-full border-b border-obsidian/20 py-4 font-serif italic focus:outline-none focus:border-brand transition-colors bg-transparent h-32" placeholder="Experiencia previa..."></textarea>
+                </div>
+                <button className="primary-btn w-full !py-6">ENVIAR SOLICITUD</button>
+              </form>
+
+              <div className="pt-20 grid grid-cols-1 md:grid-cols-2 gap-10 text-left border-t border-obsidian/5">
+                <div className="space-y-2">
+                  <div className="text-[10px] font-black text-brand uppercase tracking-widest">Email</div>
+                  <p className="text-lg">admisiones@caepr.edu</p>
+                </div>
+                <div className="space-y-2">
+                   <div className="text-[10px] font-black text-brand uppercase tracking-widest">Teléfono</div>
+                   <p className="text-lg">787-000-0000</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+      </main>
+
+      {/* Footer Minimalista - Coherente con el Logo */}
+      <footer className="py-20 px-6 border-t border-white/10 bg-obsidian text-white">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
+          <div className="flex flex-col items-center md:items-start">
+            <span className="text-2xl font-serif font-black">CAE</span>
+            <span className="text-[9px] uppercase tracking-[0.2em] opacity-40 font-bold">San Juan, Puerto Rico</span>
+          </div>
+          <div className="flex gap-8">
+            {[Instagram, Facebook, Twitter].map((I, i) => (
+              <a key={i} href="#" className="opacity-40 hover:opacity-100 hover:text-brand transition-all">
+                <I size={18} />
+              </a>
+            ))}
+          </div>
+          <p className="text-[9px] uppercase tracking-widest opacity-30 font-bold">
+            © 2026 CONSERVATORIO DE ARTES ESCÉNICAS
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
